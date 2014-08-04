@@ -17,6 +17,7 @@
 @property (nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *gameMessageLabel;
 @end
 
 @implementation ViewController
@@ -39,6 +40,12 @@
 {
     return [[PlayingCardDeck alloc] init];
 }
+- (IBAction)touchNewGameButton {
+    self.deck = nil;
+    self.game = nil;
+    [self updateUI];
+    
+}
 
 
 - (IBAction)touchCardButton:(UIButton *)sender
@@ -52,6 +59,8 @@
 
 - (void) updateUI
 {
+//    self.gameMessageLabel.text=@"";
+    
     for (UIButton *cardButton in self.cardButtons) {
         int cardIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardIndex];
@@ -60,8 +69,9 @@
         [cardButton setBackgroundImage:[self backgroundImageForCard:card]
                               forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
+        
     }
-    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d",self.game.score];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld",(long)self.game.score];
 }
 
 - (NSString *) titleForCard:(Card *)card
