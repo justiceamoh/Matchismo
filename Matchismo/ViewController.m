@@ -15,6 +15,7 @@
             
 @property (nonatomic) Deck *deck;
 @property (nonatomic) CardMatchingGame *game;
+@property (nonatomic) Card *previousCard;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameMessageLabel;
@@ -43,6 +44,7 @@
 - (IBAction)touchNewGameButton {
     self.deck = nil;
     self.game = nil;
+    self.previousCard = nil;
     [self updateUI];
     
 }
@@ -51,15 +53,16 @@
 - (IBAction)touchCardButton:(UIButton *)sender
 {
 
-    int cardIndex = [self.cardButtons indexOfObject:sender];
+    NSInteger cardIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:cardIndex];
     [self updateUI];
+    [self updateGameMessage:cardIndex];
 
 }
 
 - (void) updateUI
 {
-//    self.gameMessageLabel.text=@"";
+    self.gameMessageLabel.text=@"";
     
     for (UIButton *cardButton in self.cardButtons) {
         int cardIndex = [self.cardButtons indexOfObject:cardButton];
@@ -73,6 +76,28 @@
     }
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld",(long)self.game.score];
 }
+
+- (void) updateGameMessage:(NSInteger)cardIndex
+{
+    Card *card = [self.game cardAtIndex:cardIndex];
+    
+    if (self.previousCard) {
+        if (card.isMatched) {
+            self.gameMessageLabel.text = [NSString stringWithFormat:@"Matched %@ %@ for %d points!",self.previousCard.contents,card.contents,MATCH_BONUS];
+            self.previousCard = nil;
+        } else {
+            self.gameMessageLabel.text = [NSString stringWithFormat:@"%@%@ don't match! -%d points!",self.previousCard.contents,card.contents,MISMATCH_PENALTY];
+                self.previousCard = card;
+        }
+    } else {
+        self.gameMessageLabel.text = card.contents;
+        self.previousCard = card;
+    }
+    
+
+}
+
+
 
 - (NSString *) titleForCard:(Card *)card
 {

@@ -10,6 +10,10 @@
 #import "Deck.h"
 #import "Card.h"
 
+#define MISMATCH_PENALTY 2
+#define MATCH_BONUS 4
+#define COST_TO_CHOOSE 1
+
 @interface CardMatchingGame : NSObject
 
 //designated initializer

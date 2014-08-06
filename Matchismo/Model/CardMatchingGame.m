@@ -8,9 +8,6 @@
 
 #import "CardMatchingGame.h"
 
-#define MISMATCH_PENALTY 2
-#define MATCH_BONUS 4
-#define COST_TO_CHOOSE 1
 
 @interface CardMatchingGame()
 @property (nonatomic,readwrite) NSInteger score;
