@@ -19,6 +19,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameMessageLabel;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *gameModeSegmentedControl;
 @end
 
 @implementation ViewController
@@ -27,6 +28,7 @@
 {
     if (!_game) _game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count]
                                                           usingDeck:[self createDeck]];
+    self.gameModeSegmentedControl.userInteractionEnabled=NO;
     return _game;
 }
 
@@ -46,13 +48,14 @@
     self.game = nil;
     self.previousCard = nil;
     [self updateUI];
+    self.gameModeSegmentedControl.userInteractionEnabled=YES;
     
 }
 
 
 - (IBAction)touchCardButton:(UIButton *)sender
 {
-
+    
     NSInteger cardIndex = [self.cardButtons indexOfObject:sender];
     [self.game chooseCardAtIndex:cardIndex];
     [self updateUI];
@@ -94,7 +97,6 @@
         self.previousCard = card;
     }
     
-
 }
 
 
